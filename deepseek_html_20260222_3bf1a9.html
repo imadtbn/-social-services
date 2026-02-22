@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام البيع بالتقسيط للموظفين</title>
+    <!-- Bootstrap RTL for basic styling and RTL support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom style -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .invoice-container {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .company-info {
+            text-align: center;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .company-info h2 {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+        .company-info p {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        .employee-section {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .employee-section .row {
+            align-items: flex-end;
+        }
+        .product-table {
+            margin-top: 20px;
+        }
+        .product-table th {
+            background-color: #0d6efd;
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .product-table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .dynamic-row {
+            background-color: #f8f9fa;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #d1e7fd;
+        }
+        .total-row td {
+            font-size: 1.1rem;
+        }
+        .payment-info {
+            background-color: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .btn-pdf {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+        .btn-pdf:hover {
+            background-color: #b02a37;
+            color: white;
+        }
+        .btn-print {
+            background-color: #198754;
+            color: white;
+            border: none;
+        }
+        .btn-print:hover {
+            background-color: #146c43;
+            color: white;
+        }
+        .btn-add {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .confirm-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+        .confirm-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- معلومات الشركة أعلى الفاتورة -->
+    <div class="invoice-container">
+        <div class="company-info">
+            <h2><i class="fas fa-store"></i> شركة الخدمات الاجتماعية</h2>
+            <p>العنوان: 15 نهج الجمهورية - تونس العاصمة</p>
+            <p>الهاتف: 71 234 567 &nbsp;&nbsp; | &nbsp;&nbsp; البريد الإلكتروني: contact@socialservice.tn</p>
+        </div>
+
+        <!-- بيانات المشترك -->
+        <div class="employee-section">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="cardNumber" class="form-label"><i class="fas fa-id-card"></i> رقم بطاقة المشترك</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="cardNumber" placeholder="أدخل رقم البطاقة">
+                        <button class="btn btn-primary" type="button" id="fetchEmployee"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="employeeName" class="form-label">الاسم واللقب</label>
+                    <input type="text" class="form-control" id="employeeName" readonly placeholder="سيتم الجلب تلقائياً">
+                </div>
+                <div class="col-md-4">
+                    <label for="phoneNumber" class="form-label">رقم الهاتف</label>
+                    <input type="tel" class="form-control" id="phoneNumber" placeholder="أدخل رقم الهاتف">
+                </div>
+                <div class="col-md-4">
+                    <label for="postalAccount" class="form-label">الحساب البريدي</label>
+                    <input type="text" class="form-control" id="postalAccount" placeholder="أدخل الحساب البريدي">
+                </div>
+            </div>
+        </div>
+
+        <!-- جدول المنتجات الديناميكي -->
+        <table class="table table-bordered product-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>فئة المنتج</th>
+                    <th>نوع المنتج</th>
+                    <th>سعر المنتج</th>
+                    <th>تسبيق 10%</th>
+                    <th>الباقي</th>
+                    <th>دفع / 10 أشهر</th>
+                    <th>إجراء</th>
+                </tr>
+            </thead>
+            <tbody id="productRows">
+                <!-- الصفوف الديناميكية تضاف هنا عبر الجافاسكريبت -->
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="3" class="text-center">المجموع الكلي</td>
+                    <td id="totalPrice">0.000 دينار</td>
+                    <td id="totalDeposit">0.000 دينار</td>
+                    <td id="totalRemaining">0.000 دينار</td>
+                    <td id="totalInstallment">0.000 دينار</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- زر إضافة منتج -->
+        <div class="d-flex justify-content-start mb-3">
+            <button class="btn btn-add" id="addProductBtn"><i class="fas fa-plus-circle"></i> إضافة منتج</button>
+        </div>
+
+        <!-- معلومات إضافية عن طريقة الدفع -->
+        <div class="payment-info">
+            <h5><i class="fas fa-info-circle"></i> تعليمات إتمام عملية البيع</h5>
+            <p>الرجاء تقديم الوثائق التالية: <strong>شهادة عمل، كشف الراتب، بطاقة عمل، بطاقة التعريف الوطنية</strong></p>
+            <p><i class="fas fa-university"></i> يتم تحويل مبلغ التسبيق إلى الحساب البنكي التالي: <strong>BNT 00 123 456 78901234 56</strong></p>
+        </div>
+
+        <!-- أزرار الطباعة والحفظ كـ PDF -->
+        <div class="action-buttons">
+            <button class="btn btn-print" id="printBtn"><i class="fas fa-print"></i> طباعة الفاتورة</button>
+            <button class="btn btn-pdf" id="pdfBtn"><i class="fas fa-file-pdf"></i> حفظ PDF</button>
+        </div>
+    </div>
+</div>
+
+<!-- قائمة المنتجات المخزنة (بيانات تجريبية) -->
+<script>
+    // بيانات المنتجات (فئات وأنواع)
+    const productsData = {
+        "أجهزة كهرومنزلية": [
+            { name: "ثلاجة", price: 800 },
+            { name: "غسالة", price: 600 },
+            { name: "فرن", price: 400 },
+            { name: "مكنسة", price: 150 }
+        ],
+        "أثاث منزل": [
+            { name: "طاولة طعام", price: 300 },
+            { name: "كرسي", price: 50 },
+            { name: "خزانة", price: 700 },
+            { name: "سرير", price: 500 }
+        ],
+        "هواتف نقالة": [
+            { name: "iPhone 13", price: 4000 },
+            { name: "Samsung S22", price: 3500 },
+            { name: "Xiaomi Note 11", price: 1200 },
+            { name: "Nokia 3310", price: 300 }
+        ],
+        "أدوات مطبخ": [
+            { name: "خلاط", price: 80 },
+            { name: "ميكروويف", price: 250 },
+            { name: "قلاية هوائية", price: 400 },
+            { name: "طقم قدور", price: 200 }
+        ]
+    };
+
+    // بيانات الموظفين (رقم البطاقة => الاسم الكامل)
+    const employees = {
+        "12345": "أحمد العلي",
+        "67890": "فاطمة الزهراء",
+        "11111": "محمد الصالح",
+        "22222": "سعاد التريكي"
+    };
+
+    // عداد للصفوف المضافة
+    let rowCounter = 0;
+
+    // دالة لملء قائمة المنتجات حسب الفئة المختارة
+    function populateProductType(selectElement, category) {
+        const productSelect = selectElement.closest('tr').querySelector('.product-type');
+        productSelect.innerHTML = '<option value="">اختر المنتج</option>'; // تفريغ
+        if (category && productsData[category]) {
+            productsData[category].forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                option.textContent = product.name;
+                option.dataset.price = product.price;
+                productSelect.appendChild(option);
+            });
+        }
+        // إعادة تعيين الحقول المرتبطة بالسعر بعد تغيير الفئة
+        clearProductFields(selectElement.closest('tr'));
+    }
+
+    // دالة لتحديث الحقول (السعر، التسبيق، الباقي، القسط) عند اختيار المنتج
+    function updateProductFields(row) {
+        const productSelect = row.querySelector('.product-type');
+        const priceInput = row.querySelector('.product-price');
+        const depositInput = row.querySelector('.deposit');
+        const remainingInput = row.querySelector('.remaining');
+        const installmentInput = row.querySelector('.installment');
+
+        const selectedOption = productSelect.options[productSelect.selectedIndex];
+        if (selectedOption && selectedOption.dataset.price) {
+            const price = parseFloat(selectedOption.dataset.price);
+            priceInput.value = price.toFixed(3) + ' دينار';
+            const deposit = price * 0.1;
+            depositInput.value = deposit.toFixed(3) + ' دينار';
+            const remaining = price - deposit;
+            remainingInput.value = remaining.toFixed(3) + ' دينار';
+            const installment = remaining / 10;
+            installmentInput.value = installment.toFixed(3) + ' دينار';
+        } else {
+            clearProductFields(row);
+        }
+        // بعد كل تحديث نعيد حساب المجاميع
+        calculateTotals();
+    }
+
+    // دالة لمسح الحقول المرتبطة بالسعر
+    function clearProductFields(row) {
+        row.querySelector('.product-price').value = '';
+        row.querySelector('.deposit').value = '';
+        row.querySelector('.remaining').value = '';
+        row.querySelector('.installment').value = '';
+    }
+
+    // دالة لإضافة صف جديد إلى الجدول
+    function addNewRow() {
+        rowCounter++;
+        const tbody = document.getElementById('productRows');
+        const newRow = document.createElement('tr');
+        newRow.classList.add('dynamic-row');
+        newRow.innerHTML = `
+            <td>${rowCounter}</td>
+            <td>
+                <select class="form-select category-select" onchange="populateProductType(this, this.value)">
+                    <option value="">اختر الفئة</option>
+                    <option value="أجهزة كهرومنزلية">أجهزة كهرومنزلية</option>
+                    <option value="أثاث منزل">أثاث منزل</option>
+                    <option value="هواتف نقالة">هواتف نقالة</option>
+                    <option value="أدوات مطبخ">أدوات مطبخ</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-select product-type" onchange="updateProductFields(this.closest('tr'))">
+                    <option value="">اختر المنتج</option>
+                </select>
+            </td>
+            <td><input type="text" class="form-control product-price" readonly placeholder="السعر"></td>
+            <td><input type="text" class="form-control deposit" readonly placeholder="10%"></td>
+            <td><input type="text" class="form-control remaining" readonly placeholder="الباقي"></td>
+            <td><input type="text" class="form-control installment" readonly placeholder="قسط 10 شهور"></td>
+            <td>
+                <button class="confirm-btn" onclick="confirmRow(this)"><i class="fas fa-check"></i> تأكيد</button>
+            </td>
+        `;
+        tbody.appendChild(newRow);
+    }
+
+    // دالة تأكيد الصف (تغيير لون أو تعطيل التعديل)
+    function confirmRow(btn) {
+        const row = btn.closest('tr');
+        // نتحقق من أن جميع الحقول الضرورية مليئة
+        const category = row.querySelector('.category-select').value;
+        const product = row.querySelector('.product-type').value;
+        if (!category || !product) {
+            alert('الرجاء اختيار الفئة والمنتج أولاً');
+            return;
+        }
+        // تعطيل القوائم المنسدلة بعد التأكيد (اختياري)
+        row.querySelector('.category-select').disabled = true;
+        row.querySelector('.product-type').disabled = true;
+        btn.disabled = true;
+        btn.textContent = 'تم';
+        // إعادة حساب المجاميع (تأكيداً)
+        calculateTotals();
+    }
+
+    // دالة حساب المجاميع الكلية
+    function calculateTotals() {
+        const rows = document.querySelectorAll('#productRows tr');
+        let totalPrice = 0, totalDeposit = 0, totalRemaining = 0, totalInstallment = 0;
+
+        rows.forEach(row => {
+            // نحتاج لاستخراج القيم الرقمية من الحقول (تجاهل الوحدات)
+            const priceInput = row.querySelector('.product-price')?.value || '0';
+            const depositInput = row.querySelector('.deposit')?.value || '0';
+            const remainingInput = row.querySelector('.remaining')?.value || '0';
+            const installmentInput = row.querySelector('.installment')?.value || '0';
+
+            // استخراج الرقم قبل "دينار"
+            const priceNum = parseFloat(priceInput.replace(' دينار', '')) || 0;
+            const depositNum = parseFloat(depositInput.replace(' دينار', '')) || 0;
+            const remainingNum = parseFloat(remainingInput.replace(' دينار', '')) || 0;
+            const installmentNum = parseFloat(installmentInput.replace(' دينار', '')) || 0;
+
+            totalPrice += priceNum;
+            totalDeposit += depositNum;
+            totalRemaining += remainingNum;
+            totalInstallment += installmentNum;
+        });
+
+        document.getElementById('totalPrice').textContent = totalPrice.toFixed(3) + ' دينار';
+        document.getElementById('totalDeposit').textContent = totalDeposit.toFixed(3) + ' دينار';
+        document.getElementById('totalRemaining').textContent = totalRemaining.toFixed(3) + ' دينار';
+        document.getElementById('totalInstallment').textContent = totalInstallment.toFixed(3) + ' دينار';
+    }
+
+    // دالة جلب بيانات الموظف (محاكاة)
+    document.getElementById('fetchEmployee').addEventListener('click', function() {
+        const cardNumber = document.getElementById('cardNumber').value.trim();
+        const employeeNameInput = document.getElementById('employeeName');
+        if (employees[cardNumber]) {
+            employeeNameInput.value = employees[cardNumber];
+        } else {
+            employeeNameInput.value = 'رقم غير موجود';
+        }
+    });
+
+    // إضافة صف عند تحميل الصفحة لأول مرة
+    window.onload = function() {
+        addNewRow(); // يبدأ بصف واحد
+    };
+
+    // زر إضافة منتج
+    document.getElementById('addProductBtn').addEventListener('click', function() {
+        addNewRow();
+    });
+
+    // طباعة الفاتورة
+    document.getElementById('printBtn').addEventListener('click', function() {
+        window.print();
+    });
+
+    // حفظ PDF (مكتبة html2pdf - نضيفها ديناميكياً)
+    document.getElementById('pdfBtn').addEventListener('click', function() {
+        // نحتاج تحميل مكتبة html2pdf إذا لم تكن محملة
+        if (typeof html2pdf === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+            script.onload = generatePDF;
+            document.head.appendChild(script);
+        } else {
+            generatePDF();
+        }
+    });
+
+    function generatePDF() {
+        const element = document.querySelector('.invoice-container');
+        html2pdf(element, {
+            margin:       10,
+            filename:     'فاتورة_شراء.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        });
+    }
+</script>
+
+<!-- لجعل الدوال العامة متاحة في onchange المضمن -->
+<script>
+    // تصدير الدوال إلى النطاق العام
+    window.populateProductType = populateProductType;
+    window.updateProductFields = updateProductFields;
+    window.confirmRow = confirmRow;
+</script>
+</body>
+</html>
