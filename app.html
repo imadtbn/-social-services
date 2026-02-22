@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام بيع منتجات التقسيط - موظفي الشركة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .company-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        .company-info span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .customer-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+        }
+
+        .section-title {
+            color: #1e3c72;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 24px;
+        }
+
+        .search-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .products-table-container {
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .products-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 12px;
+            font-weight: 600;
+            font-size: 0.92em;
+        }
+
+        .products-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .products-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .products-table select, .products-table input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        .products-table select {
+            cursor: pointer;
+        }
+
+        .product-search {
+            position: relative;
+        }
+
+        .product-search input {
+            width: 100%;
+            padding: 10px 10px 10px 35px;
+        }
+
+        .product-search::before {
+            content: "🔍";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .price-display, .advance-display, .rest-display, .monthly-display {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .advance-display {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .rest-display {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .monthly-display {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .confirm-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            background: #218838;
+        }
+
+        .confirm-btn.confirmed {
+            background: #17a2b8;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .add-product-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .add-product-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .totals-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .total-card {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .total-card h4 {
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .total-card .amount {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .instructions-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+        }
+
+        .instructions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-right: 4px solid #667eea;
+        }
+
+        .instruction-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .bank-info {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid #ffc107;
+        }
+
+        .bank-info h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .bank-info p {
+            color: #856404;
+            font-size: 1.1em;
+        }
+
+        .actions-section {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .action-btn {
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .print-btn {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #138496;
+            transform: translateY(-3px);
+        }
+
+        .pdf-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .pdf-btn:hover {
+            background: #c82333;
+            transform: translateY(-3px);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .add-product-btn, .delete-btn, .actions-section, .search-btn {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .main-content {
+                padding: 15px;
+            }
+            .products-table th, .products-table td {
+                padding: 8px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏢 شركة التقسيط للموظفين</h1>
+            <div class="company-info">
+                <span>📍 العنوان: حي الأمل، الشارع الرئيسي، المبنى 15</span>
+                <span>📞 الهاتف: 05 55 12 34 56</span>
+                <span>✉️ البريد: contact@entreprise.dz</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="customer-section">
+                <h2 class="section-title">👤 معلومات المشترك</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="cardNumber">رقم بطاقة المشترك</label>
+                        <input type="text" id="cardNumber" placeholder="أدخل رقم البطاقة">
+                    </div>
+                    <button class="search-btn" onclick="searchCustomer()">🔍 بحث</button>
+                    <div class="form-group">
+                        <label for="fullName">الاسم واللقب</label>
+                        <input type="text" id="fullName" readonly placeholder="سيتم جلبه تلقائياً">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف</label>
+                        <input type="tel" id="phone" placeholder="05 XX XX XX XX">
+                    </div>
+                    <div class="form-group">
+                        <label for="postalAccount">الحساب البريدي</label>
+                        <input type="text" id="postalAccount" placeholder="رقم الحساب البريدي">
+                    </div>
+                    <div class="form-group">
+                        <label for="service">الخدمة/القسم</label>
+                        <input type="text" id="service" placeholder="القسم أو الخدمة">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">🛒 قائمة المنتجات</h2>
+                <div class="products-table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>فئة المنتج</th>
+                                <th>نوع المنتج</th>
+                                <th>سعر المنتج</th>
+                                <th>تسبيق 10%</th>
+                                <th>الباقي</th>
+                                <th>دفع/10 أشهر</th>
+                                <th>تأكيد</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody">
+                        </tbody>
+                    </table>
+                </div>
+                <button class="add-product-btn" onclick="addProductRow()">➕ إضافة منتج جديد</button>
+            </section>
+
+            <section class="totals-section">
+                <h2 style="text-align: center; margin-bottom: 20px;">💰 ملخص المبالغ</h2>
+                <div class="totals-grid">
+                    <div class="total-card">
+                        <h4>المجموع الكلي</h4>
+                        <div class="amount" id="totalAmount">0.00 دج</div>
+                    </div>
+                    <div class="total-card">
+                        <h4>مجموع التسبيقات 10%</h4>
+                        <div class="amount" id="totalAdvance">0.00 دج</div>
+                    </div>
+                    <div class="total-card">
+                        <h4>المبالغ المتبقية</h4>
+                        <div class="amount" id="totalRest">0.00 دج</div>
+                    </div>
+                    <div class="total-card">
+                        <h4>الأقساط الشهرية</h4>
+                        <div class="amount" id="totalMonthly">0.00 دج</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="instructions-section">
+                <h2 class="section-title">📋 وثائق وشروط البيع</h2>
+                <div class="instructions-list">
+                    <div class="instruction-item">
+                        <input type="checkbox" id="doc1">
+                        <label for="doc1">شهادة عمل سارية المفعول</label>
+                    </div>
+                    <div class="instruction-item">
+                        <input type="checkbox" id="doc2">
+                        <label for="doc2">كشف الراتب الشهري</label>
+                    </div>
+                    <div class="instruction-item">
+                        <input type="checkbox" id="doc3">
+                        <label for="doc3">بطاقة عمل حديثة</label>
+                    </div>
+                    <div class="instruction-item">
+                        <input type="checkbox" id="doc4">
+                        <label for="doc4">بطاقة التعريف الوطنية</label>
+                    </div>
+                    <div class="instruction-item">
+                        <input type="checkbox" id="doc5">
+                        <label for="doc5">عقد التقسيط الموقع</label>
+                    </div>
+                    <div class="instruction-item">
+                        <input type="checkbox" id="doc6">
+                        <label for="doc6">التعهد بالدفع الشهري</label>
+                    </div>
+                </div>
+                <div class="bank-info">
+                    <h4>🏦 معلومات التحويل المصرفي</h4>
+                    <p>رقم الحساب البنكي لتحويل مبلغ التسبيق: <strong>007 99999 000123456789 05</strong></p>
+                    <p>البنك: بنك التنمية المحلية - CPA</p>
+                    <p>على المشترك إرفاق وصل التحويل مع ملف الطلب</p>
+                </div>
+            </section>
+
+            <section class="actions-section">
+                <button class="action-btn print-btn" onclick="printInvoice()">🖨️ طباعة الفاتورة</button>
+                <button class="action-btn pdf-btn" onclick="savePDF()">💾 حفظ PDF</button>
+            </section>
+        </main>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // قاعدة بيانات المنتجات
+        const productsDatabase = {
+            'منتجات كهرومنزلية': ['ثلاجة سامسونج 400L', 'غسالة أوتوماتيك LG', 'مكيف هواء 18000 BTU', 'تليفزيون سمارت 55 بوصة', 'ميكروويف سامسونج', 'مكنسة كهربائية فيليبس', 'غسالة أطباق بوش', 'سخان ماء كهربائي'],
+            'أثاث منزل': ['طقم جلوس 7 مقاعد', 'غرفة نوم كاملة', 'طاولة سفرة 6 كراسي', 'خزانة ملابس 4 أبواب', 'سرير ماستر 180x200', 'مكتب عمل مع كرسي', 'أريكة سرير', 'مكتبة تلفزيون'],
+            'هواتف نقالة': ['iPhone 15 Pro Max', 'Samsung Galaxy S24 Ultra', 'Xiaomi 14 Pro', 'OPPO Find X7', 'Huawei Mate 60 Pro', 'Google Pixel 8 Pro', 'OnePlus 12', 'iPhone 15'],
+            'أدوات مطبخ': ['طقم أواني طهي 12 قطعة', 'محضرة طعام كينوود', 'خلاط كهربائي 1000W', 'قلاية بدون زيت', 'آلة قهوة نسبريسو', 'فرن كهربائي 60L', 'مقلاة كهربائية', 'معالج طعام فيلبس']
+        };
+
+        const productPrices = {
+            'ثلاجة سامسونج 400L': 45000,
+            'غسالة أوتوماتيك LG': 38000,
+            'مكيف هواء 18000 BTU': 42000,
+            'تليفزيون سمارت 55 بوصة': 35000,
+            'ميكروويف سامسونج': 8500,
+            'مكنسة كهربائية فيليبس': 12000,
+            'غسالة أطباق بوش': 55000,
+            'سخان ماء كهربائي': 15000,
+            'طقم جلوس 7 مقاعد': 68500,
+            'غرفة نوم كاملة': 95000,
+            'طاولة سفرة 6 كراسي': 42000,
+            'خزانة ملابس 4 أبواب': 38000,
+            'سرير ماستر 180x200': 32000,
+            'مكتب عمل مع كرسي': 18000,
+            'أريكة سرير': 25000,
+            'مكتبة تلفزيون': 15000,
+            'iPhone 15 Pro Max': 145000,
+            'Samsung Galaxy S24 Ultra': 135000,
+            'Xiaomi 14 Pro': 85000,
+            'OPPO Find X7': 75000,
+            'Huawei Mate 60 Pro': 110000,
+            'Google Pixel 8 Pro': 95000,
+            'OnePlus 12': 80000,
+            'iPhone 15': 95000,
+            'طقم أواني طهي 12 قطعة': 18000,
+            'محضرة طعام كينوود': 22000,
+            'خلاط كهربائي 1000W': 8500,
+            'قلاية بدون زيت': 15000,
+            'آلة قهوة نسبريسو': 28000,
+            'فرن كهربائي 60L': 12000,
+            'مقلاة كهربائية': 9500,
+            'معالج طعام فيلبس': 16000
+        };
+
+        // قاعدة بيانات العملاء للبحث
+        const customersDatabase = {
+            '123456': { name: 'أحمد بن علي', service: 'قسم الموارد البشرية' },
+            '234567': { name: 'فاطمة الزهراء', service: 'قسم المحاسبة' },
+            '345678': { name: 'محمد الأمين', service: 'قسم تقنية المعلومات' },
+            '456789': { name: 'سارة منصور', service: 'قسم المبيعات' },
+            '567890': { name: 'كريم بوشامة', service: 'قسم الصيانة' }
+        };
+
+        let rowCount = 0;
+
+        function showNotification(message, type = 'success') {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = `notification ${type}`;
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3000);
+        }
+
+        function searchCustomer() {
+            const cardNumber = document.getElementById('cardNumber').value.trim();
+            const fullNameInput = document.getElementById('fullName');
+            
+            if (!cardNumber) {
+                showNotification('الرجاء إدخال رقم البطاقة', 'error');
+                return;
+            }
+
+            const customer = customersDatabase[cardNumber];
+            if (customer) {
+                fullNameInput.value = customer.name;
+                document.getElementById('service').value = customer.service;
+                showNotification('تم العثور على المشترك بنجاح');
+            } else {
+                fullNameInput.value = 'غير مسجل - يرجى التحقق من الرقم';
+                showNotification('رقم البطاقة غير موجود', 'error');
+            }
+        }
+
+        function addProductRow() {
+            rowCount++;
+            const tbody = document.getElementById('productsBody');
+            const row = document.createElement('tr');
+            row.dataset.rowId = rowCount;
+            row.innerHTML = `
+                <td>${rowCount}</td>
+                <td>
+                    <select onchange="updateProducts(${rowCount})" id="category-${rowCount}">
+                        <option value="">اختر الفئة</option>
+                        <option value="منتجات كهرومنزلية">منتجات كهرومنزلية 🏠</option>
+                        <option value="أثاث منزل">أثاث منزل 🛋️</option>
+                        <option value="هواتف نقالة">هواتف نقالة 📱</option>
+                        <option value="أدوات مطبخ">أدوات مطبخ 🍳</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="product-search">
+                        <select onchange="updatePrice(${rowCount})" id="product-${rowCount}" disabled>
+                            <option value="">اختر المنتج</option>
+                        </select>
+                    </div>
+                </td>
+                <td><div class="price-display" id="price-${rowCount}">0.00 دج</div></td>
+                <td><div class="advance-display" id="advance-${rowCount}">0.00 دج</div></td>
+                <td><div class="rest-display" id="rest-${rowCount}">0.00 دج</div></td>
+                <td><div class="monthly-display" id="monthly-${rowCount}">0.00 دج</div></td>
+                <td><button class="confirm-btn" id="confirm-${rowCount}" onclick="confirmPurchase(${rowCount})">تأكيد</button></td>
+                <td><button class="delete-btn" onclick="deleteRow(${rowCount})">🗑️</button></td>
+            `;
+            tbody.appendChild(row);
+            updateTotals();
+        }
+
+        function updateProducts(rowId) {
+            const category = document.getElementById(`category-${rowId}`).value;
+            const productSelect = document.getElementById(`product-${rowId}`);
+            
+            productSelect.innerHTML = '<option value="">اختر المنتج</option>';
+            productSelect.disabled = !category;
+            
+            if (category && productsDatabase[category]) {
+                productsDatabase[category].forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product;
+                    option.textContent = product;
+                    productSelect.appendChild(option);
+                });
+            }
+            
+            updatePrice(rowId);
+        }
+
+        function updatePrice(rowId) {
+            const product = document.getElementById(`product-${rowId}`).value;
+            const priceEl = document.getElementById(`price-${rowId}`);
+            const advanceEl = document.getElementById(`advance-${rowId}`);
+            const restEl = document.getElementById(`rest-${rowId}`);
+            const monthlyEl = document.getElementById(`monthly-${rowId}`);
+            
+            if (product && productPrices[product]) {
+                const price = productPrices[product];
+                const advance = price * 0.1;
+                const rest = price - advance;
+                const monthly = rest / 10;
+                
+                priceEl.textContent = price.toLocaleString('ar-DZ') + ' دج';
+                advanceEl.textContent = advance.toLocaleString('ar-DZ') + ' دج';
+                restEl.textContent = rest.toLocaleString('ar-DZ') + ' دج';
+                monthlyEl.textContent = monthly.toLocaleString('ar-DZ') + ' دج';
+            } else {
+                priceEl.textContent = '0.00 دج';
+                advanceEl.textContent = '0.00 دج';
+                restEl.textContent = '0.00 دج';
+                monthlyEl.textContent = '0.00 دج';
+            }
+            updateTotals();
+        }
+
+        function confirmPurchase(rowId) {
+            const btn = document.getElementById(`confirm-${rowId}`);
+            const product = document.getElementById(`product-${rowId}`).value;
+            
+            if (!product) {
+                showNotification('الرجاء اختيار منتج أولاً', 'error');
+                return;
+            }
+            
+            btn.classList.add('confirmed');
+            btn.textContent = '✓ تم';
+            btn.disabled = true;
+            document.getElementById(`category-${rowId}`).disabled = true;
+            document.getElementById(`product-${rowId}`).disabled = true;
+            showNotification('تم تأكيد الشراء بنجاح');
+        }
+
+        function deleteRow(rowId) {
+            const row = document.querySelector(`tr[data-row-id="${rowId}"]`);
+            if (row) {
+                row.remove();
+                renumberRows();
+                updateTotals();
+            }
+        }
+
+        function renumberRows() {
+            const rows = document.querySelectorAll('#productsBody tr');
+            rows.forEach((row, index) => {
+                row.dataset.rowId = index + 1;
+                row.cells[0].textContent = index + 1;
+                // Update all IDs in the row
+                const oldId = rowCount;
+                const newId = index + 1;
+            });
+            rowCount = rows.length;
+        }
+
+        function updateTotals() {
+            let total = 0, totalAdvance = 0, totalRest = 0;
+            
+            document.querySelectorAll('#productsBody tr').forEach(row => {
+                const priceText = row.querySelector('[id^="price-"]').textContent;
+                const advanceText = row.querySelector('[id^="advance-"]').textContent;
+                const restText = row.querySelector('[id^="rest-"]').textContent;
+                
+                const price = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
+                const advance = parseFloat(advanceText.replace(/[^\d.]/g, '')) || 0;
+                const rest = parseFloat(restText.replace(/[^\d.]/g, '')) || 0;
+                
+                total += price;
+                totalAdvance += advance;
+                totalRest += rest;
+            });
+            
+            const totalMonthly = totalRest / 10;
+            
+            document.getElementById('totalAmount').textContent = total.toLocaleString('ar-DZ') + ' دج';
+            document.getElementById('totalAdvance').textContent = totalAdvance.toLocaleString('ar-DZ') + ' دج';
+            document.getElementById('totalRest').textContent = totalRest.toLocaleString('ar-DZ') + ' دج';
+            document.getElementById('totalMonthly').textContent = totalMonthly.toLocaleString('ar-DZ') + ' دج';
+        }
+
+        function printInvoice() {
+            if (!validateInvoice()) return;
+            window.print();
+        }
+
+        function savePDF() {
+            if (!validateInvoice()) return;
+            showNotification('جاري إنشاء ملف PDF...');
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function validateInvoice() {
+            const fullName = document.getElementById('fullName').value;
+            if (!fullName || fullName === 'غير مسجل - يرجى التحقق من الرقم') {
+                showNotification('الرجاء البحث عن المشترك أولاً', 'error');
+                return false;
+            }
+            
+            const rows = document.querySelectorAll('#productsBody tr');
+            if (rows.length === 0) {
+                showNotification('الرجاء إضافة منتج واحد على الأقل', 'error');
+                return false;
+            }
+            
+            let hasConfirmed = false;
+            rows.forEach(row => {
+                if (row.querySelector('.confirm-btn.confirmed')) hasConfirmed = true;
+            });
+            
+            if (!hasConfirmed) {
+                showNotification('الرجاء تأكيد شراء منتج واحد على الأقل', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Initialize with one row
+        window.onload = function() {
+            addProductRow();
+        };
+    </script>
+</body>
+</html>
