@@ -1,436 +1,1508 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام البيع بالتقسيط للموظفين</title>
-    <!-- Bootstrap RTL for basic styling and RTL support -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Custom style -->
+    <title>التعاونية الاستهلاكية - 35</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+        /* ===== المتغيرات والأنماط العامة ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(145deg, #2b3f6e 0%, #4a2c6d 100%);
+            min-height: 100vh;
+            padding: 15px;
+            line-height: 1.5;
         }
-        .invoice-container {
-            background-color: #fff;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* ===== الهيدر ===== */
+        .header {
+            background: linear-gradient(135deg, #0b2a4a 0%, #1b3b6b 100%);
+            color: white;
+            padding: 24px 18px;
+            text-align: center;
+            border-bottom: 4px solid #f9b81b;
+        }
+
+        .header h1 {
+            font-size: 1em;
+            margin-bottom: 6px;
+            font-weight: 100;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
         .company-info {
-            text-align: center;
-            border-bottom: 2px solid #0d6efd;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-        .company-info h2 {
-            color: #0d6efd;
-            font-weight: bold;
-        }
-        .company-info p {
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-        }
-        .employee-section {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .employee-section .row {
-            align-items: flex-end;
-        }
-        .product-table {
-            margin-top: 20px;
-        }
-        .product-table th {
-            background-color: #0d6efd;
-            color: white;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .product-table td {
-            vertical-align: middle;
-            text-align: center;
-        }
-        .dynamic-row {
-            background-color: #f8f9fa;
-        }
-        .total-row {
-            font-weight: bold;
-            background-color: #d1e7fd;
-        }
-        .total-row td {
-            font-size: 1.1rem;
-        }
-        .payment-info {
-            background-color: #fff3cd;
-            border-right: 5px solid #ffc107;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .btn-pdf {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-        }
-        .btn-pdf:hover {
-            background-color: #b02a37;
-            color: white;
-        }
-        .btn-print {
-            background-color: #198754;
-            color: white;
-            border: none;
-        }
-        .btn-print:hover {
-            background-color: #146c43;
-            color: white;
-        }
-        .btn-add {
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-        }
-        .action-buttons {
             display: flex;
-            gap: 10px;
-            justify-content: flex-end;
+            justify-content: center;
+            gap: 26px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
         }
-        .confirm-btn {
-            background-color: #28a745;
+
+        .company-info span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .company-info i {
+            color: #f9b81b;
+            font-size: 1.1em;
+        }
+
+        /* ===== المحتوى الرئيسي ===== */
+        .main-content {
+            padding: 25px;
+            background: #f4f7fc;
+        }
+
+        /* ===== أقسام المعلومات ===== */
+        .customer-section {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9eef2;
+        }
+
+        .section-title {
+            color: #0b2a4a;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-right: 5px solid #f9b81b;
+            padding-right: 15px;
+            font-weight: 700;
+        }
+
+        .section-title i {
+            color: #f9b81b;
+            font-size: 1.2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #1e3a5f;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-group label i {
+            color: #f9b81b;
+            width: 18px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 11px 12px;
+            border: 2px solid #dbe1e8;
+            border-radius: 14px;
+            font-size: 0.95em;
+            background: #f9fcff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #f9b81b;
+            box-shadow: 0 0 0 3px rgba(249, 184, 27, 0.2);
+        }
+
+        .search-btn {
+            background: #1e8b4c;
             color: white;
             border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.9rem;
+            padding: 12px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 16px rgba(30, 139, 76, 0.3);
         }
+
+        .search-btn:hover {
+            background: #146b38;
+            transform: translateY(-2px);
+        }
+
+        /* ===== جدول المنتجات ===== */
+        .products-table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            min-width: 1000px;
+        }
+
+        .products-table th {
+            background: #1e3a5f;
+            color: white;
+            padding: 14px 10px;
+            font-weight: 600;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+
+        .products-table th i {
+            margin-left: 5px;
+            color: #f9b81b;
+        }
+
+        .products-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .products-table tr:hover td {
+            background: #f0f5fa;
+        }
+
+        .products-table select,
+        .products-table input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dbe1e8;
+            border-radius: 12px;
+            font-size: 0.9em;
+            background: #f9fcff;
+        }
+
+        .product-search {
+            position: relative;
+        }
+
+        .product-search i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5e5e5e;
+            pointer-events: none;
+        }
+
+        .product-search select {
+            padding-right: 35px;
+        }
+
+        .price-display,
+        .advance-display,
+        .rest-display,
+        .monthly-display {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.95em;
+        }
+
+        .advance-display {
+            background: #fff5d9;
+            color: #8a6e2e;
+        }
+
+        .rest-display {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .monthly-display {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .confirm-btn {
+            background: #0f6e3f;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
         .confirm-btn:hover {
-            background-color: #218838;
+            background: #0a5230;
+            transform: scale(1.02);
+        }
+
+        .confirm-btn.confirmed {
+            background: #1e7898;
+        }
+
+        .delete-btn {
+            background: #b91c1c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85em;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .delete-btn:hover {
+            background: #991b1b;
+        }
+
+        .add-product-btn {
+            background: linear-gradient(145deg, #1e3a5f, #143152);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 10px 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: fit-content;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-product-btn:hover {
+            background: #0f2942;
+            transform: translateY(-3px);
+        }
+
+        /* ===== ملخص المبالغ ===== */
+        .totals-section {
+            background: linear-gradient(145deg, #1e3a5f, #143152);
+            color: white;
+            padding: 18px;
+            border-radius: 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .total-card {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 18px 12px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .total-card h4 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .total-card .amount {
+            font-size: 1.6em;
+            font-weight: 800;
+        }
+
+        /* ===== قسم التعليمات والملف ===== */
+        .instructions-section {
+            background: white;
+            padding: 25px;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-subtitle {
+            font-size: 1.2em;
+            color: #1e3a5f;
+            margin: 20px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 6px;
+        }
+
+        .instructions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 18px;
+            background: #f8fafc;
+            border-radius: 18px;
+            border-right: 4px solid #f9b81b;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .instruction-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #f9b81b;
+        }
+
+        .bank-info {
+            background: #fffae6;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 25px;
+            border: 2px solid #f9b81b;
+        }
+
+        .bank-info h4 {
+            color: #8a6e2e;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bank-info p {
+            color: #4a3a1a;
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+
+        /* ===== أزرار الطباعة ===== */
+        .actions-section {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px 0 10px;
+        }
+
+        .action-btn {
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .print-btn {
+            background: #1e7898;
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #155a75;
+            transform: translateY(-3px);
+        }
+
+        .pdf-btn {
+            background: #b22222;
+            color: white;
+        }
+
+        .pdf-btn:hover {
+            background: #8b1a1a;
+            transform: translateY(-3px);
+        }
+
+        /* ===== إشعارات ===== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 16px 28px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            transform: translateY(-150%);
+            transition: transform 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background: #1e8b4c;
+        }
+
+        .notification.error {
+            background: #b22222;
+        }
+
+        /* ===== أنماط الطباعة المحسّنة لورقة A4 ===== */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0.6cm;
+                /* هوامش مناسبة للطباعة */
+                height: 297mm;
+            }
+
+            .customer-section,
+            .instructions-section,
+            .totals-section {
+                margin-bottom: 6mm !important;
+            }
+
+            .customer-section input {
+                height: 7mm !important;
+                padding: 1mm 2mm !important;
+            }
+
+            .customer-section .form-grid {
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 3mm !important;
+            }
+
+            .section-title {
+                font-size: 11pt !important;
+                margin-bottom: 3mm !important;
+            }
+
+            .section-subtitle {
+                font-size: 10pt !important;
+                margin: 3mm 0 !important;
+            }
+
+            .instructions-list {
+                gap: 2mm !important;
+            }
+
+            .instruction-item {
+                padding: 2mm 3mm !important;
+            }
+
+            * {
+                page-break-inside: avoid !important;
+            }
+
+            .header {
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
+            .main-content {
+                page-break-before: avoid !important;
+            }
+
+            .header {
+                background: white !important;
+                color: black !important;
+                border-bottom: 1px solid #000 !important;
+
+                padding: 3mm 0 2mm 0 !important;
+                /* تقليل الارتفاع */
+                margin: 0 !important;
+
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 10pt !important;
+                line-height: 1.2 !important;
+                margin: 0 !important;
+            }
+
+            .company-info {
+                margin-top: 2mm !important;
+                padding: 2mm 4mm !important;
+                gap: 6mm !important;
+                font-size: 9pt !important;
+                border: 1px solid #999 !important;
+            }
+
+            .company-info {
+                display: block !important;
+                text-align: center;
+            }
+
+            .company-info span {
+                display: inline-block !important;
+                margin: 0 6mm !important;
+            }
+
+            body {
+                margin: 0 !important;
+            }
+
+
+            .customer-section {
+                padding: 6mm !important;
+            }
+
+            .instructions-section {
+                padding: 6mm !important;
+            }
+
+            .totals-section {
+                padding: 5mm !important;
+            }
+
+
+            .products-table {
+                min-width: auto !important;
+                width: 100% !important;
+                table-layout: fixed !important;
+            }
+
+            .products-table th,
+            .products-table td {
+                white-space: normal !important;
+                word-break: break-word !important;
+                overflow-wrap: anywhere !important;
+                padding: 3px 2px !important;
+                font-size: 8.8pt !important;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                font-size: 11pt;
+                line-height: 1.4;
+            }
+
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                background: white;
+            }
+
+            /* الهيدر */
+            .header {
+                background: white !important;
+                color: black !important;
+                border-bottom: 2px solid #000;
+                padding: 0.4cm 0;
+                text-shadow: none;
+            }
+
+            .header h1 {
+                color: black;
+                font-size: 12pt;
+                margin-bottom: 3px;
+            }
+
+            .company-info {
+                background: #f0f0f0 !important;
+                color: black !important;
+                border: 1px solid #aaa;
+                padding: 8px 12px;
+                font-size: 10pt;
+            }
+
+            .company-info i {
+                color: black !important;
+            }
+
+            /* إخفاء العناصر التفاعلية */
+            .add-product-btn,
+            .delete-btn,
+            .actions-section,
+            .search-btn,
+            .notification,
+            .confirm-btn,
+            .product-search i,
+            .section-title i,
+            .products-table th i,
+            .instruction-item input[type="checkbox"] {
+                display: none !important;
+            }
+
+            /* إظهار مربعات الاختيار كنص */
+            .instruction-item {
+                background: none;
+                border: 1px solid #ccc;
+                page-break-inside: avoid;
+                padding: 8px 12px;
+            }
+
+            .instruction-item label {
+                font-weight: normal;
+            }
+
+            /* إظهار معلومات البنك بحدود سوداء */
+            .bank-info {
+                display: block !important;
+                background: white;
+                border: 2px solid black;
+                color: black;
+                page-break-inside: avoid;
+                padding: 15px;
+            }
+
+            .bank-info h4,
+            .bank-info p {
+                color: black;
+            }
+
+            /* جدول المنتجات: إزالة الأعمدة الأخيرة (تأكيد وحذف) */
+            .products-table th:nth-child(1),
+            .products-table th:nth-child(8),
+            .products-table th:nth-child(9),
+            .products-table td:nth-child(1),
+            .products-table td:nth-child(8),
+            .products-table td:nth-child(9) {
+                display: none !important;
+            }
+
+            .products-table {
+                font-size: 9pt;
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            /* تحديد عرض كل عمود بالنسبة المئوية */
+            .products-table th:nth-child(1) {
+                width: 2%;
+            }
+
+            /* الرقم */
+            .products-table th:nth-child(2) {
+                width: 8%;
+            }
+
+            /* فئة المنتج */
+            .products-table th:nth-child(3) {
+                width: 8%;
+            }
+
+            /* نوع المنتج */
+            .products-table th:nth-child(4) {
+                width: 5%;
+            }
+
+            /* سعر المنتج */
+            .products-table th:nth-child(5) {
+                width: 5%;
+            }
+
+            /* الدفع المسبق */
+            .products-table th:nth-child(6) {
+                width: 5%;
+            }
+
+            /* المبلغ المتبقي */
+            .products-table th:nth-child(7) {
+                width: 5%;
+            }
+
+            /* القسط الشهري */
+            .products-table th:nth-child(8) {
+                width: 0%;
+            }
+
+            /* تأكيد */
+            .products-table th:nth-child(9) {
+                width: 0%;
+            }
+
+            /* حذف */
+
+
+            .products-table th,
+            .products-table td {
+                border: 1px solid #000 !important;
+                padding: 5px 3px !important;
+                background: white !important;
+                color: black !important;
+                word-wrap: break-word;
+            }
+
+            .products-table th {
+                background: #ddd !important;
+                font-weight: bold;
+            }
+
+            /* خلايا الأسعار بدون خلفية ملونة */
+            .price-display,
+            .advance-display,
+            .rest-display,
+            .monthly-display {
+                background: transparent !important;
+                color: black !important;
+                border: none;
+                padding: 0;
+                font-weight: normal;
+            }
+
+            /* منع كسر الصفوف */
+            tr {
+                page-break-inside: avoid;
+            }
+
+            /* المحتوى الرئيسي بدون خلفية */
+            .main-content {
+                padding: 0;
+                background: white;
+            }
+
+            /* ملخص المبالغ */
+            .totals-section {
+                background: white !important;
+                color: black !important;
+                border: 2px solid #333;
+                padding: 14px;
+                box-shadow: none;
+                margin-bottom: 14px;
+            }
+
+            .total-card {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #333;
+                backdrop-filter: none;
+                padding: 10px 6px;
+            }
+
+            .total-card h4 {
+                font-size: 10pt;
+            }
+
+            .total-card .amount {
+                font-size: 14pt;
+            }
+
+            /* العناوين */
+            .section-title {
+                color: black;
+                border-right-color: black;
+                font-size: 13pt;
+                margin-bottom: 10px;
+            }
+
+            .section-subtitle {
+                font-size: 11pt;
+                color: black;
+                border-bottom-color: #aaa;
+            }
+
+            /* معلومات المستفيد: عرض 4 أعمدة في الصف */
+            .customer-section .form-grid {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 8px !important;
+            }
+
+            .customer-section .form-group {
+                page-break-inside: avoid;
+            }
+
+            .customer-section input {
+                padding: 4px 6px !important;
+                font-size: 8pt !important;
+                border: 1px solid #000 !important;
+                background: white !important;
+                height: auto !important;
+            }
+
+            .customer-section label {
+                font-size: 8pt !important;
+                margin-bottom: 2px !important;
+            }
+
+            .customer-section {
+                padding: 10px !important;
+                margin-bottom: 7px !important;
+            }
+
+            /* تحجيم عام */
+            h2 {
+                font-size: 14pt;
+            }
+
+            h3 {
+                font-size: 12pt;
+            }
+        }
+
+        /* ===== تجاوب مع الهواتف ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1em;
+            }
+
+            .company-info {
+                gap: 12px;
+                font-size: 0.85em;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .section-title {
+                font-size: 1.2em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .add-product-btn {
+                width: 100%;
+            }
+        }
+
+        /* إصلاحات صغيرة */
+        /* منع التعديل بعد التأكيد بدون تغيير الشكل */
+        .products-table select:disabled {
+            background: #f9fcff;
+            /* نفس لون الحقول العادي */
+            color: #000;
+            /* نفس لون النص */
+            opacity: 1;
+            /* إزالة الشفافية */
+            border: 2px solid #dbe1e8;
+            cursor: default;
+            /* يظهر أنه غير قابل للتعديل */
         }
     </style>
+
+    <style>
+        @media (max-width: 768px) {
+
+            body {
+                padding: 6px;
+                background: #f4f7fc;
+                /* إزالة الخلفية الثقيلة لتسريع الهاتف */
+            }
+
+            .container {
+                border-radius: 14px;
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .header {
+                padding: 10px 6px;
+            }
+
+            .header h1 {
+                font-size: 0.8em;
+                margin-bottom: 2px;
+            }
+
+            .company-info {
+                flex-direction: column;
+                gap: 4px;
+                font-size: 0.75em;
+                padding: 6px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .form-group input {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .products-table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 12px;
+            }
+
+            .products-table {
+                min-width: 720px;
+                /* عرض منطقي للتمرير */
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .products-table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 12px;
+            }
+
+            .products-table {
+                min-width: 720px;
+                /* عرض منطقي للتمرير */
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .add-product-btn,
+            .action-btn,
+            .search-btn {
+                width: 100%;
+                font-size: 1em;
+                padding: 12px;
+            }
+
+            .confirm-btn,
+            .delete-btn {
+                padding: 6px 8px;
+                font-size: 0.75em;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .totals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .total-card .amount {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .totals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .total-card .amount {
+                font-size: 1.2em;
+            }
+        }
+
+        /* ===== تحسين معلومات المستفيد على الهاتف ===== */
+        @media (max-width: 768px) {
+
+            .customer-section {
+                padding: 12px;
+            }
+
+            .customer-section .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* عمودين مريحين */
+                gap: 10px;
+            }
+
+            .customer-section .form-group {
+                width: 100%;
+            }
+
+            .customer-section label {
+                font-size: 0.8em;
+                line-height: 1.3;
+            }
+
+            .customer-section input {
+                width: 100%;
+                padding: 9px;
+                font-size: 0.9em;
+            }
+        }
+
+        .header h1 {
+            font-size: 10pt !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+        }
+
+        @media (max-width: 480px) {
+
+            .customer-section .form-grid {
+                grid-template-columns: 1fr;
+                /* عمود واحد */
+            }
+
+            .section-title {
+                font-size: 1em;
+            }
+        }
+
+        .form-group {
+            min-width: 0;
+            /* يمنع كسر الـ grid في الموبايل */
+        }
+
+        input {
+            max-width: 100%;
+        }
+    </style>
+
 </head>
+
 <body>
+    <div class="container">
+        <header class="header">
+            <h1>الجمهورية الجزائرية الديمقراطية الشعبية</h1>
+            <h1>وزارة التربية الوطنية</h1>
+            <h1>الخدمات الاجتماعية لعمال التربية الوطنية</h1>
+            <h1>اللجنة الولائية لولاية بومرداس</h1>
+            <h1>التعاونية الاستهلاكية</h1>
+            <div class="company-info">
+                <span><i class="fas fa-map-marker-alt"></i> العنوان: الشارع الرئيسي، بومرداس</span>
+                <span><i class="fas fa-phone-alt"></i> الهاتف: 0770325070</span>
+                <span><i class="fas fa-envelope"></i> البريد الإلكتروني: contact@entreprise.dz</span>
+            </div>
+        </header>
 
-<div class="container">
-    <!-- معلومات الشركة أعلى الفاتورة -->
-    <div class="invoice-container">
-        <div class="company-info">
-            <h2><i class="fas fa-store"></i> شركة الخدمات الاجتماعية</h2>
-            <p>العنوان: 15 نهج الجمهورية - تونس العاصمة</p>
-            <p>الهاتف: 71 234 567 &nbsp;&nbsp; | &nbsp;&nbsp; البريد الإلكتروني: contact@socialservice.tn</p>
-        </div>
-
-        <!-- بيانات المشترك -->
-        <div class="employee-section">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-4">
-                    <label for="cardNumber" class="form-label"><i class="fas fa-id-card"></i> رقم بطاقة المشترك</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="cardNumber" placeholder="أدخل رقم البطاقة">
-                        <button class="btn btn-primary" type="button" id="fetchEmployee"><i class="fas fa-search"></i></button>
+        <main class="main-content">
+            <!-- معلومات المستفيد -->
+            <section class="customer-section">
+                <h2 class="section-title"><i class="fas fa-user-check"></i> معلومات المستفيد</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> رقم بطاقة المستفيد</label>
+                        <input type="text" placeholder="أدخل رقم البطاقة">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user-tag"></i> اللقب</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> الاسم</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-female"></i> اللقب الأصلي للزوجة</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> تاريخ الميلاد</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-map-pin"></i> مكان الميلاد</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-home"></i> العنوان الشخصي</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-briefcase"></i> الوظيفة</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-mobile-alt"></i> رقم الهاتف</label>
+                        <input type="tel" placeholder="05 XX XX XX XX" pattern="0[5-7][0-9]{8}" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-credit-card"></i> الحساب البريدي CCP</label>
+                        <input type="text" placeholder="أدخل رقم الحساب البريدي" required>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label for="employeeName" class="form-label">الاسم واللقب</label>
-                    <input type="text" class="form-control" id="employeeName" readonly placeholder="سيتم الجلب تلقائياً">
+            </section>
+
+            <!-- قائمة المنتجات -->
+            <section>
+                <h2 class="section-title"><i class="fas fa-boxes"></i> قائمة المنتجات</h2>
+                <div class="products-table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> الرقم</th>
+                                <th><i class="fas fa-layer-group"></i> فئة المنتج</th>
+                                <th><i class="fas fa-tag"></i> نوع المنتج</th>
+                                <th><i class="fas fa-dollar-sign"></i> سعر المنتج</th>
+                                <th><i class="fas fa-hand-holding-usd"></i> التسبيق 10%</th>
+                                <th><i class="fas fa-coins"></i>الباقي</th>
+                                <th><i class="fas fa-calendar-week"></i> القسط الشهري</th>
+                                <th><i class="fas fa-check-circle"></i> تأكيد</th>
+                                <th><i class="fas fa-trash-alt"></i> حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody"></tbody>
+                    </table>
                 </div>
-                <div class="col-md-4">
-                    <label for="phoneNumber" class="form-label">رقم الهاتف</label>
-                    <input type="tel" class="form-control" id="phoneNumber" placeholder="أدخل رقم الهاتف">
+                <button class="add-product-btn" onclick="addProductRow()"><i class="fas fa-plus-circle"></i> إضافة منتج
+                    جديد</button>
+            </section>
+
+            <!-- ملخص المبالغ -->
+            <section class="totals-section">
+                <h2 style="text-align: center; margin-bottom: 10px;"><i class="fas fa-chart-pie"></i> ملخص المبالغ</h2>
+                <div class="totals-grid">
+                    <div class="total-card">
+                        <h4><i class="fas fa-wallet"></i> المجموع الكلي</h4>
+                        <div class="amount" id="totalAmount">0.00 دج</div>
+                    </div>
+                    <div class="total-card">
+                        <h4><i class="fas fa-arrow-up"></i> مجموع التسبيقات 10%</h4>
+                        <div class="amount" id="totalAdvance">0.00 دج</div>
+                    </div>
+                    <div class="total-card">
+                        <h4><i class="fas fa-arrow-down"></i> المبالغ المتبقية</h4>
+                        <div class="amount" id="totalRest">0.00 دج</div>
+                    </div>
+                    <div class="total-card">
+                        <h4><i class="fas fa-calendar-alt"></i> الأقساط الشهرية</h4>
+                        <div class="amount" id="totalMonthly">0.00 دج</div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <label for="postalAccount" class="form-label">الحساب البريدي</label>
-                    <input type="text" class="form-control" id="postalAccount" placeholder="أدخل الحساب البريدي">
+            </section>
+
+            <!-- الملف وشروط البيع -->
+            <section class="instructions-section">
+                <h2 class="section-title"><i class="fas fa-file-invoice"></i> الملف وشروط البيع</h2>
+
+                <h3 class="section-subtitle"><i class="fas fa-briefcase"></i> الملف المرفق بالنسبة للعاملين</h3>
+                <div class="instructions-list">
+                    <div class="instruction-item"><input type="checkbox" id="emp-doc2"><label for="emp-doc2">كشف الراتب
+                            الشهري (حديث)</label></div>
+                    <div class="instruction-item"><input type="checkbox" id="emp-doc3"><label for="emp-doc3">صك بريدي
+                            مشطوب</label></div>
+                    <div class="instruction-item"><input type="checkbox" id="emp-doc4"><label for="emp-doc4">نسختان (02)
+                            من بطاقة التعريف الوطنية</label></div>
                 </div>
-            </div>
-        </div>
 
-        <!-- جدول المنتجات الديناميكي -->
-        <table class="table table-bordered product-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>فئة المنتج</th>
-                    <th>نوع المنتج</th>
-                    <th>سعر المنتج</th>
-                    <th>تسبيق 10%</th>
-                    <th>الباقي</th>
-                    <th>دفع / 10 أشهر</th>
-                    <th>إجراء</th>
-                </tr>
-            </thead>
-            <tbody id="productRows">
-                <!-- الصفوف الديناميكية تضاف هنا عبر الجافاسكريبت -->
-            </tbody>
-            <tfoot>
-                <tr class="total-row">
-                    <td colspan="3" class="text-center">المجموع الكلي</td>
-                    <td id="totalPrice">0.000 دينار</td>
-                    <td id="totalDeposit">0.000 دينار</td>
-                    <td id="totalRemaining">0.000 دينار</td>
-                    <td id="totalInstallment">0.000 دينار</td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
+                <h3 class="section-subtitle"><i class="fas fa-user-clock"></i> الملف المرفق بالنسبة للمتقاعدين</h3>
+                <div class="instructions-list">
+                    <div class="instruction-item"><input type="checkbox" id="ret-doc1"><label for="ret-doc1">شهادة إعلام
+                            على الراتب (Notification)</label></div>
+                    <div class="instruction-item"><input type="checkbox" id="ret-doc2"><label for="ret-doc2">صك بريدي
+                            مشطوب</label></div>
+                    <div class="instruction-item"><input type="checkbox" id="ret-doc3"><label for="ret-doc3">نسختان (02)
+                            من بطاقة التعريف الوطنية</label></div>
+                </div>
 
-        <!-- زر إضافة منتج -->
-        <div class="d-flex justify-content-start mb-3">
-            <button class="btn btn-add" id="addProductBtn"><i class="fas fa-plus-circle"></i> إضافة منتج</button>
-        </div>
+                <div class="bank-info">
+                    <h4><i class="fas fa-university"></i> معلومات التحويل في الحساب الجاري CCP</h4>
+                    <p>1- رقم الحساب الجاري لتحويل مبلغ التسبيق: <strong>323035 مفتاح 34</strong></p>
+                    <p>عنوان المرسل إليه: <strong> التعاونية الإستهلاكية للخدمات الإجتماعية لعمال التربية
+                            الوطنية</strong></p>
 
-        <!-- معلومات إضافية عن طريقة الدفع -->
-        <div class="payment-info">
-            <h5><i class="fas fa-info-circle"></i> تعليمات إتمام عملية البيع</h5>
-            <p>الرجاء تقديم الوثائق التالية: <strong>شهادة عمل، كشف الراتب، بطاقة عمل، بطاقة التعريف الوطنية</strong></p>
-            <p><i class="fas fa-university"></i> يتم تحويل مبلغ التسبيق إلى الحساب البنكي التالي: <strong>BNT 00 123 456 78901234 56</strong></p>
-        </div>
+                    <p>2- يتم الدفع مجموع التسبيقات 10% عبر جميع مكاتب بريد الجزائر .</p>
+                    <p><strong>3- على المستفيد إرفاق وصل التحويل مع ملف الطلب.</strong></p>
+                </div>
+            </section>
 
-        <!-- أزرار الطباعة والحفظ كـ PDF -->
-        <div class="action-buttons">
-            <button class="btn btn-print" id="printBtn"><i class="fas fa-print"></i> طباعة الفاتورة</button>
-            <button class="btn btn-pdf" id="pdfBtn"><i class="fas fa-file-pdf"></i> حفظ PDF</button>
-        </div>
+            <!-- أزرار الطباعة -->
+            <section class="actions-section">
+                <button class="action-btn print-btn" onclick="printInvoice()"><i class="fas fa-print"></i> طباعة
+                    الفاتورة</button>
+                <button class="action-btn pdf-btn" onclick="savePDF()"><i class="fas fa-file-pdf"></i> حفظ PDF</button>
+            </section>
+        </main>
     </div>
-</div>
 
-<!-- قائمة المنتجات المخزنة (بيانات تجريبية) -->
-<script>
-    // بيانات المنتجات (فئات وأنواع)
-    const productsData = {
-        "أجهزة كهرومنزلية": [
-            { name: "ثلاجة", price: 800 },
-            { name: "غسالة", price: 600 },
-            { name: "فرن", price: 400 },
-            { name: "مكنسة", price: 150 }
-        ],
-        "أثاث منزل": [
-            { name: "طاولة طعام", price: 300 },
-            { name: "كرسي", price: 50 },
-            { name: "خزانة", price: 700 },
-            { name: "سرير", price: 500 }
-        ],
-        "هواتف نقالة": [
-            { name: "iPhone 13", price: 4000 },
-            { name: "Samsung S22", price: 3500 },
-            { name: "Xiaomi Note 11", price: 1200 },
-            { name: "Nokia 3310", price: 300 }
-        ],
-        "أدوات مطبخ": [
-            { name: "خلاط", price: 80 },
-            { name: "ميكروويف", price: 250 },
-            { name: "قلاية هوائية", price: 400 },
-            { name: "طقم قدور", price: 200 }
-        ]
-    };
+    <div class="notification" id="notification"></div>
 
-    // بيانات الموظفين (رقم البطاقة => الاسم الكامل)
-    const employees = {
-        "12345": "أحمد العلي",
-        "67890": "فاطمة الزهراء",
-        "11111": "محمد الصالح",
-        "22222": "سعاد التريكي"
-    };
+    <script>
+        (function () {
+            "use strict";
 
-    // عداد للصفوف المضافة
-    let rowCounter = 0;
+            /* ===== قاعدة البيانات ===== */
+            const Database = {
+                categories: {
+                    'منتجات كهرومنزلية': ['ثلاجة سامسونج 400L', 'غسالة أوتوماتيك LG', 'مكيف هواء 18000 BTU', 'تليفزيون سمارت 55 بوصة', 'ميكروويف سامسونج', 'مكنسة كهربائية فيليبس', 'غسالة أطباق بوش', 'سخان ماء كهربائي'],
+                    'أثاث منزل': ['طقم جلوس 7 مقاعد', 'غرفة نوم كاملة', 'طاولة سفرة 6 كراسي', 'خزانة ملابس 4 أبواب', 'سرير ماستر 180x200', 'مكتب عمل مع كرسي', 'أريكة سرير', 'مكتبة تلفزيون'],
+                    'هواتف نقالة': ['iPhone 15 Pro Max', 'Samsung Galaxy S24 Ultra', 'Xiaomi 14 Pro', 'OPPO Find X7', 'Huawei Mate 60 Pro', 'Google Pixel 8 Pro', 'OnePlus 12', 'iPhone 15'],
+                    'أدوات مطبخ': ['طقم أواني طهي 12 قطعة', 'محضرة طعام كينوود', 'خلاط كهربائي 1000W', 'قلاية بدون زيت', 'آلة قهوة نسبريسو', 'فرن كهربائي 60L', 'مقلاة كهربائية', 'معالج طعام فيلبس']
+                },
+                prices: {
+                    'ثلاجة سامسونج 400L': 45000,
+                    'غسالة أوتوماتيك LG': 38000,
+                    'مكيف هواء 18000 BTU': 42000,
+                    'تليفزيون سمارت 55 بوصة': 35000,
+                    'ميكروويف سامسونج': 8500,
+                    'مكنسة كهربائية فيليبس': 12000,
+                    'غسالة أطباق بوش': 55000,
+                    'سخان ماء كهربائي': 15000,
+                    'طقم جلوس 7 مقاعد': 68500,
+                    'غرفة نوم كاملة': 95000,
+                    'طاولة سفرة 6 كراسي': 42000,
+                    'خزانة ملابس 4 أبواب': 38000,
+                    'سرير ماستر 180x200': 32000,
+                    'مكتب عمل مع كرسي': 18000,
+                    'أريكة سرير': 25000,
+                    'مكتبة تلفزيون': 15000,
+                    'iPhone 15 Pro Max': 145000,
+                    'Samsung Galaxy S24 Ultra': 135000,
+                    'Xiaomi 14 Pro': 85000,
+                    'OPPO Find X7': 75000,
+                    'Huawei Mate 60 Pro': 110000,
+                    'Google Pixel 8 Pro': 95000,
+                    'OnePlus 12': 80000,
+                    'iPhone 15': 95000,
+                    'طقم أواني طهي 12 قطعة': 18000,
+                    'محضرة طعام كينوود': 22000,
+                    'خلاط كهربائي 1000W': 8500,
+                    'قلاية بدون زيت': 15000,
+                    'آلة قهوة نسبريسو': 28000,
+                    'فرن كهربائي 60L': 12000,
+                    'مقلاة كهربائية': 9500,
+                    'معالج طعام فيلبس': 16000
+                }
+            };
 
-    // دالة لملء قائمة المنتجات حسب الفئة المختارة
-    function populateProductType(selectElement, category) {
-        const productSelect = selectElement.closest('tr').querySelector('.product-type');
-        productSelect.innerHTML = '<option value="">اختر المنتج</option>'; // تفريغ
-        if (category && productsData[category]) {
-            productsData[category].forEach(product => {
-                const option = document.createElement('option');
-                option.value = product.name;
-                option.textContent = product.name;
-                option.dataset.price = product.price;
-                productSelect.appendChild(option);
-            });
-        }
-        // إعادة تعيين الحقول المرتبطة بالسعر بعد تغيير الفئة
-        clearProductFields(selectElement.closest('tr'));
-    }
+            const Financing = {
+                advanceRate: 0.10,
+                months: 10,
+                calculate(price) {
+                    const advance = price * this.advanceRate;
+                    const rest = price - advance;
+                    const monthly = rest / this.months;
+                    return { price, advance, rest, monthly };
+                }
+            };
 
-    // دالة لتحديث الحقول (السعر، التسبيق، الباقي، القسط) عند اختيار المنتج
-    function updateProductFields(row) {
-        const productSelect = row.querySelector('.product-type');
-        const priceInput = row.querySelector('.product-price');
-        const depositInput = row.querySelector('.deposit');
-        const remainingInput = row.querySelector('.remaining');
-        const installmentInput = row.querySelector('.installment');
+            let rowCount = 0;
+            const productsData = {}; // تخزين بيانات كل صف
 
-        const selectedOption = productSelect.options[productSelect.selectedIndex];
-        if (selectedOption && selectedOption.dataset.price) {
-            const price = parseFloat(selectedOption.dataset.price);
-            priceInput.value = price.toFixed(3) + ' دينار';
-            const deposit = price * 0.1;
-            depositInput.value = deposit.toFixed(3) + ' دينار';
-            const remaining = price - deposit;
-            remainingInput.value = remaining.toFixed(3) + ' دينار';
-            const installment = remaining / 10;
-            installmentInput.value = installment.toFixed(3) + ' دينار';
-        } else {
-            clearProductFields(row);
-        }
-        // بعد كل تحديث نعيد حساب المجاميع
-        calculateTotals();
-    }
+            function formatCurrency(value) {
+                return value.toLocaleString('ar-DZ') + ' دج';
+            }
 
-    // دالة لمسح الحقول المرتبطة بالسعر
-    function clearProductFields(row) {
-        row.querySelector('.product-price').value = '';
-        row.querySelector('.deposit').value = '';
-        row.querySelector('.remaining').value = '';
-        row.querySelector('.installment').value = '';
-    }
+            function setText(id, value) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            }
 
-    // دالة لإضافة صف جديد إلى الجدول
-    function addNewRow() {
-        rowCounter++;
-        const tbody = document.getElementById('productRows');
-        const newRow = document.createElement('tr');
-        newRow.classList.add('dynamic-row');
-        newRow.innerHTML = `
-            <td>${rowCounter}</td>
-            <td>
-                <select class="form-select category-select" onchange="populateProductType(this, this.value)">
-                    <option value="">اختر الفئة</option>
-                    <option value="أجهزة كهرومنزلية">أجهزة كهرومنزلية</option>
-                    <option value="أثاث منزل">أثاث منزل</option>
-                    <option value="هواتف نقالة">هواتف نقالة</option>
-                    <option value="أدوات مطبخ">أدوات مطبخ</option>
-                </select>
-            </td>
-            <td>
-                <select class="form-select product-type" onchange="updateProductFields(this.closest('tr'))">
-                    <option value="">اختر المنتج</option>
-                </select>
-            </td>
-            <td><input type="text" class="form-control product-price" readonly placeholder="السعر"></td>
-            <td><input type="text" class="form-control deposit" readonly placeholder="10%"></td>
-            <td><input type="text" class="form-control remaining" readonly placeholder="الباقي"></td>
-            <td><input type="text" class="form-control installment" readonly placeholder="قسط 10 شهور"></td>
-            <td>
-                <button class="confirm-btn" onclick="confirmRow(this)"><i class="fas fa-check"></i> تأكيد</button>
-            </td>
-        `;
-        tbody.appendChild(newRow);
-    }
+            function showNotification(message, type = 'success') {
+                const notif = document.getElementById('notification');
+                notif.textContent = message;
+                notif.className = `notification ${type} show`;
+                setTimeout(() => notif.classList.remove('show'), 3000);
+            }
 
-    // دالة تأكيد الصف (تغيير لون أو تعطيل التعديل)
-    function confirmRow(btn) {
-        const row = btn.closest('tr');
-        // نتحقق من أن جميع الحقول الضرورية مليئة
-        const category = row.querySelector('.category-select').value;
-        const product = row.querySelector('.product-type').value;
-        if (!category || !product) {
-            alert('الرجاء اختيار الفئة والمنتج أولاً');
-            return;
-        }
-        // تعطيل القوائم المنسدلة بعد التأكيد (اختياري)
-        row.querySelector('.category-select').disabled = true;
-        row.querySelector('.product-type').disabled = true;
-        btn.disabled = true;
-        btn.textContent = 'تم';
-        // إعادة حساب المجاميع (تأكيداً)
-        calculateTotals();
-    }
+            window.addProductRow = function () {
+                rowCount++;
+                const id = rowCount;
+                const tbody = document.getElementById('productsBody');
+                const row = document.createElement('tr');
+                row.dataset.rowId = id;
+                row.innerHTML = `
+                    <td>${id}</td>
+                    <td>
+                        <select onchange="updateProducts(${id})" id="category-${id}">
+                            <option value="">اختر الفئة</option>
+                            <option value="منتجات كهرومنزلية">منتجات كهرومنزلية</option>
+                            <option value="أثاث منزل">أثاث منزل</option>
+                            <option value="هواتف نقالة">هواتف نقالة</option>
+                            <option value="أدوات مطبخ">أدوات مطبخ</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="product-search">
+                            <i class="fas fa-search"></i>
+                            <select onchange="updatePrice(${id})" id="product-${id}" disabled>
+                                <option value="">اختر المنتج</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td><div class="price-display" id="price-${id}">0.00 دج</div></td>
+                    <td><div class="advance-display" id="advance-${id}">0.00 دج</div></td>
+                    <td><div class="rest-display" id="rest-${id}">0.00 دج</div></td>
+                    <td><div class="monthly-display" id="monthly-${id}">0.00 دج</div></td>
+                    <td><button class="confirm-btn" id="confirm-${id}" onclick="confirmPurchase(${id})"><i class="fas fa-check"></i> تأكيد</button></td>
+                    <td><button class="delete-btn" onclick="deleteRow(${id})"><i class="fas fa-trash-alt"></i> حذف</button></td>
+                `;
+                tbody.appendChild(row);
+            };
 
-    // دالة حساب المجاميع الكلية
-    function calculateTotals() {
-        const rows = document.querySelectorAll('#productRows tr');
-        let totalPrice = 0, totalDeposit = 0, totalRemaining = 0, totalInstallment = 0;
+            window.updateProducts = function (id) {
+                const category = document.getElementById(`category-${id}`).value;
+                const productSelect = document.getElementById(`product-${id}`);
+                productSelect.innerHTML = '<option value="">اختر المنتج</option>';
+                if (!category) {
+                    productSelect.disabled = true;
+                    return;
+                }
+                Database.categories[category].forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p;
+                    opt.textContent = p;
+                    productSelect.appendChild(opt);
+                });
+                productSelect.disabled = false;
+            };
 
-        rows.forEach(row => {
-            // نحتاج لاستخراج القيم الرقمية من الحقول (تجاهل الوحدات)
-            const priceInput = row.querySelector('.product-price')?.value || '0';
-            const depositInput = row.querySelector('.deposit')?.value || '0';
-            const remainingInput = row.querySelector('.remaining')?.value || '0';
-            const installmentInput = row.querySelector('.installment')?.value || '0';
+            window.updatePrice = function (id) {
+                const product = document.getElementById(`product-${id}`).value;
+                if (!product) return;
+                const price = Database.prices[product];
+                const result = Financing.calculate(price);
+                productsData[id] = result;
+                setText(`price-${id}`, formatCurrency(result.price));
+                setText(`advance-${id}`, formatCurrency(result.advance));
+                setText(`rest-${id}`, formatCurrency(result.rest));
+                setText(`monthly-${id}`, formatCurrency(result.monthly));
+                updateTotals();
+            };
 
-            // استخراج الرقم قبل "دينار"
-            const priceNum = parseFloat(priceInput.replace(' دينار', '')) || 0;
-            const depositNum = parseFloat(depositInput.replace(' دينار', '')) || 0;
-            const remainingNum = parseFloat(remainingInput.replace(' دينار', '')) || 0;
-            const installmentNum = parseFloat(installmentInput.replace(' دينار', '')) || 0;
+            window.confirmPurchase = function (id) {
+                const btn = document.getElementById(`confirm-${id}`);
+                if (!btn) return;
+                btn.classList.add('confirmed');
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> تم';
+                btn.disabled = true;
+                document.getElementById(`category-${id}`).disabled = true;
+                document.getElementById(`product-${id}`).disabled = true;
+                showNotification('تم تأكيد الشراء بنجاح');
+            };
 
-            totalPrice += priceNum;
-            totalDeposit += depositNum;
-            totalRemaining += remainingNum;
-            totalInstallment += installmentNum;
+            window.deleteRow = function (id) {
+                delete productsData[id];
+                const row = document.querySelector(`tr[data-row-id="${id}"]`);
+                if (row) row.remove();
+                updateTotals();
+            };
+
+            function updateTotals() {
+                let total = 0, advance = 0, rest = 0;
+                Object.values(productsData).forEach(p => {
+                    total += p.price;
+                    advance += p.advance;
+                    rest += p.rest;
+                });
+                const monthly = rest / Financing.months;
+                setText('totalAmount', formatCurrency(total));
+                setText('totalAdvance', formatCurrency(advance));
+                setText('totalRest', formatCurrency(rest));
+                setText('totalMonthly', formatCurrency(monthly));
+            }
+
+            function validateBeforePrint() {
+                if (Object.keys(productsData).length === 0) {
+                    showNotification('الرجاء إضافة منتج واحد على الأقل', 'error');
+                    return false;
+                }
+                let anyConfirmed = false;
+                document.querySelectorAll('.confirm-btn.confirmed').forEach(() => anyConfirmed = true);
+                if (!anyConfirmed) {
+                    showNotification('الرجاء تأكيد شراء منتج واحد على الأقل', 'error');
+                    return false;
+                }
+                return true;
+            }
+
+            window.printInvoice = function () {
+                if (validateBeforePrint()) window.print();
+            };
+
+            window.savePDF = function () {
+                if (validateBeforePrint()) {
+                    showNotification('جاري إنشاء ملف PDF...');
+                    setTimeout(() => window.print(), 500);
+                }
+            };
+
+            // تهيئة أول صف
+            window.addEventListener('load', addProductRow);
+        })();
+
+
+        // تمرير تلقائي للحقل التالي في الهاتف
+        document.addEventListener("input", e => {
+            if (e.target.tagName === "INPUT" && e.target.value.length > 0) {
+                const inputs = [...document.querySelectorAll("input")];
+                const i = inputs.indexOf(e.target);
+                if (inputs[i + 1]) inputs[i + 1].scrollIntoView({ behavior: "smooth", block: "center" });
+            }
         });
 
-        document.getElementById('totalPrice').textContent = totalPrice.toFixed(3) + ' دينار';
-        document.getElementById('totalDeposit').textContent = totalDeposit.toFixed(3) + ' دينار';
-        document.getElementById('totalRemaining').textContent = totalRemaining.toFixed(3) + ' دينار';
-        document.getElementById('totalInstallment').textContent = totalInstallment.toFixed(3) + ' دينار';
-    }
-
-    // دالة جلب بيانات الموظف (محاكاة)
-    document.getElementById('fetchEmployee').addEventListener('click', function() {
-        const cardNumber = document.getElementById('cardNumber').value.trim();
-        const employeeNameInput = document.getElementById('employeeName');
-        if (employees[cardNumber]) {
-            employeeNameInput.value = employees[cardNumber];
-        } else {
-            employeeNameInput.value = 'رقم غير موجود';
-        }
-    });
-
-    // إضافة صف عند تحميل الصفحة لأول مرة
-    window.onload = function() {
-        addNewRow(); // يبدأ بصف واحد
-    };
-
-    // زر إضافة منتج
-    document.getElementById('addProductBtn').addEventListener('click', function() {
-        addNewRow();
-    });
-
-    // طباعة الفاتورة
-    document.getElementById('printBtn').addEventListener('click', function() {
-        window.print();
-    });
-
-    // حفظ PDF (مكتبة html2pdf - نضيفها ديناميكياً)
-    document.getElementById('pdfBtn').addEventListener('click', function() {
-        // نحتاج تحميل مكتبة html2pdf إذا لم تكن محملة
-        if (typeof html2pdf === 'undefined') {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-            script.onload = generatePDF;
-            document.head.appendChild(script);
-        } else {
-            generatePDF();
-        }
-    });
-
-    function generatePDF() {
-        const element = document.querySelector('.invoice-container');
-        html2pdf(element, {
-            margin:       10,
-            filename:     'فاتورة_شراء.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, letterRendering: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        });
-    }
-</script>
-
-<!-- لجعل الدوال العامة متاحة في onchange المضمن -->
-<script>
-    // تصدير الدوال إلى النطاق العام
-    window.populateProductType = populateProductType;
-    window.updateProductFields = updateProductFields;
-    window.confirmRow = confirmRow;
-</script>
+    </script>
 </body>
+
 </html>
